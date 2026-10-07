@@ -1,0 +1,33 @@
+{% extends 'base.html' %} {% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-7">
+    <section id="contact-form">
+      <h2 class="text-center mb-4">Надішліть мені повідомлення</h2>
+      <form
+        action="#"
+        method="POST"
+        class="p-4 border rounded bg-white shadow-sm custom-form"
+      >
+        <div class="mb-3">
+          <label for="name" class="form-label">Ваше ім'я</label>
+          <input type="text" class="form-control" id="name" required />
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email адреса</label>
+          <input type="email" class="form-control" id="email" required />
+        </div>
+        <div class="mb-3">
+          <label for="message" class="form-label">Повідомлення</label>
+          <textarea
+            class="form-control"
+            id="message"
+            rows="5"
+            required
+          ></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Відправити</button>
+      </form>
+    </section>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends 'base.html' %} {% block content %}
+<div class="row">
+  <div class="col-md-4 text-center">
+    <img
+      src="{{ url_for('static', filename='images/cat.jpg') }}"
+      alt="Photo"
+      class="img-fluid rounded-circle profile-img mb-3"
+    />
+    <h2>Денис Каширець</h2>
+    <p class="text-muted">Студент</p>
+  </div>
+
+  <div class="col-md-8">
+    <section id="about" class="mb-4">
+      <h3>Про себе</h3>
+      <p>Студент, люблю котиків</p>
+    </section>
+
+    <section id="education" class="mb-4">
+      <h3>Освіта</h3>
+      <ul>
+        <li>
+          Карпатський університет - Інженерія програмного забезпечення (2024 -
+          дотепер)
+        </li>
+      </ul>
+    </section>
+
+    <section id="skills" class="mb-4">
+      <h3>Навички</h3>
+      <span class="badge bg-primary fs-6">Критичне мислення</span>
+      <span class="badge bg-primary fs-6">Тайм-менеджмент</span>
+      <span class="badge bg-primary fs-6">Англійська (B1)</span>
+    </section>
+
+    <section id="tech" class="mb-4">
+      <h3>Технології</h3>
+      <span class="badge bg-success fs-6">Python / Flask</span>
+      <span class="badge bg-success fs-6">HTML5 / CSS3</span>
+      <span class="badge bg-success fs-6">Bootstrap 5</span>
+      <span class="badge bg-success fs-6">Git</span>
+    </section>
+
+    <section id="experience" class="mb-4">
+      <h3>Досвід роботи / Проєкти</h3>
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">
+            Веб-сайт "Портфоліо" (Лабораторна робота №2)
+          </h5>
+          <p class="card-text">
+            Створення багатосторінкового сайту на Flask з використанням Jinja2,
+            маршрутизації та Bootstrap.
+          </p>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+{% endblock %}
