@@ -1,0 +1,28 @@
+body {
+  background-color: #f4f6f9;
+}
+
+.profile-img {
+  width: 220px;
+  height: 220px;
+  object-fit: cover;
+  border: 5px solid #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+section h3 {
+  color: #2c3e50;
+  border-bottom: 2px solid #0d6efd;
+  padding-bottom: 8px;
+  margin-bottom: 20px;
+}
+
+.custom-form {
+  border-top: 4px solid #0d6efd !important;
+}
+
+.badge {
+  margin-right: 5px;
+  margin-bottom: 5px;
+  padding: 8px 12px;
+}
