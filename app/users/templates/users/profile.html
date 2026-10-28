@@ -1,0 +1,13 @@
+{% extends "base.html" %} {% block title %}Профіль{% endblock %} {% block
+content %}
+<div class="card shadow-sm" style="max-width: 500px">
+  <div class="card-body">
+    <h2 class="card-title">Вітаємо, {{ username }}!</h2>
+    <p class="card-text">Ви успішно авторизовані.</p>
+
+    <form method="POST" action="{{ url_for('users.logout') }}">
+      <button type="submit" class="btn btn-outline-danger">Вийти</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

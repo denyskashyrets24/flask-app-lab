@@ -22,9 +22,24 @@
             >Досвід</a
           >
         </li>
+        {% if session.get('username') %}
         <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('contacts') }}">Контакти</a>
+          <a class="nav-link" href="{{ url_for('users.profile') }}">Профіль</a>
         </li>
+        <li class="nav-item">
+          <form
+            method="POST"
+            action="{{ url_for('users.logout') }}"
+            class="d-inline"
+          >
+            <button type="submit" class="btn btn-link nav-link">Вийти</button>
+          </form>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('users.login') }}">Логін</a>
+        </li>
+        {% endif %}
       </ul>
     </div>
   </div>
