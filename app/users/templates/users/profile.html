@@ -1,10 +1,64 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %} {% block html_attrs %}data-bs-theme="{{ 'dark' if
+theme == 'dark' else 'light' }}"{% endblock %} {% block head_extra %} {% if
+theme == 'dark' %}
+<style>
+  body {
+    background-color: #121212;
+    color: #e9ecef;
+  }
+  .card {
+    background-color: #1e1e1e;
+    border-color: #343a40;
+  }
+  .table {
+    --bs-table-bg: #1e1e1e;
+  }
+</style>
+{% elif theme == 'green' %}
+<style>
+  body {
+    background-color: #e8f5e9;
+    color: #1b3d1f;
+  }
+  .card {
+    background-color: #f1f8e9;
+    border-color: #a5d6a7;
+  }
+  h2,
+  h5 {
+    color: #1b5e20;
+  }
+</style>
+{% endif %} {% endblock %} {% block content %}
 <h2 class="mb-3">Вітаємо, {{ username }}!</h2>
 <p class="text-muted">Ви успішно авторизовані.</p>
 
 <form method="POST" action="{{ url_for('users.logout') }}" class="mb-4">
   <button type="submit" class="btn btn-outline-danger">Вийти</button>
 </form>
+
+<div class="card shadow-sm mb-4">
+  <div class="card-body">
+    <h5 class="card-title">Колірна схема</h5>
+    <p class="mb-3">Поточна: <strong>{{ themes[theme] }}</strong></p>
+    <form
+      method="POST"
+      action="{{ url_for('users.set_theme') }}"
+      class="d-flex flex-wrap gap-2"
+    >
+      {% for value, label in themes.items() %}
+      <button
+        type="submit"
+        name="theme"
+        value="{{ value }}"
+        class="btn {% if value == theme %}btn-primary{% else %}btn-outline-primary{% endif %}"
+      >
+        {{ label }}
+      </button>
+      {% endfor %}
+    </form>
+  </div>
+</div>
 
 <div class="row g-4">
   <div class="col-lg-6">

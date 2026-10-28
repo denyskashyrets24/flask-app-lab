@@ -8,6 +8,17 @@ FAKE_USERS = {
 
 COOKIE_PATH = "/"
 SESSION_COOKIE_NAME = "session"
+THEME_COOKIE_NAME = "theme"
+RESERVED_COOKIES = {SESSION_COOKIE_NAME, THEME_COOKIE_NAME}
+
+THEMES = {
+    "light": "Світла",
+    "dark": "Темна",
+    "green": "Зелена",
+}
+DEFAULT_THEME = "light"
+THEME_MAX_AGE = 60 * 60 * 24 * 365
+
 DEFAULT_COOKIE_MAX_AGE = 3600
 
 
@@ -16,6 +27,11 @@ def _require_login():
         flash("Сесія недоступна. Будь ласка, увійдіть у систему.", "warning")
         return redirect(url_for("users.login"))
     return None
+
+
+def _current_theme():
+    theme = request.cookies.get(THEME_COOKIE_NAME, DEFAULT_THEME)
+    return theme if theme in THEMES else DEFAULT_THEME
 
 
 @users_bp.route("/login", methods=["GET", "POST"])
@@ -41,12 +57,32 @@ def profile():
     if redirect_response:
         return redirect_response
 
-    cookies = {k: v for k, v in request.cookies.items() if k != SESSION_COOKIE_NAME}
+    cookies = {k: v for k, v in request.cookies.items() if k not in RESERVED_COOKIES}
+    theme = _current_theme()
     return render_template(
         "users/profile.html",
         username=session["username"],
         cookies=cookies,
+        theme=theme,
+        themes=THEMES,
     )
+
+
+@users_bp.route("/profile/theme", methods=["POST"])
+def set_theme():
+    redirect_response = _require_login()
+    if redirect_response:
+        return redirect_response
+
+    theme = request.form.get("theme", "")
+    if theme not in THEMES:
+        flash("Невідома колірна схема.", "danger")
+        return redirect(url_for("users.profile"))
+
+    response = redirect(url_for("users.profile"))
+    response.set_cookie(THEME_COOKIE_NAME, theme, max_age=THEME_MAX_AGE, path=COOKIE_PATH)
+    flash(f"Колірну схему змінено на «{THEMES[theme]}».", "success")
+    return response
 
 
 @users_bp.route("/profile/cookies/add", methods=["POST"])
@@ -59,8 +95,8 @@ def cookie_add():
     value = request.form.get("value", "").strip()
     max_age_raw = request.form.get("max_age", "").strip()
 
-    if not key or not value or key == SESSION_COOKIE_NAME:
-        flash("Ключ і значення є обов'язковими. Ключ «session» зарезервовано.", "danger")
+    if not key or not value or key in RESERVED_COOKIES:
+        flash("Ключ і значення є обов'язковими. Ключі «session» і «theme» зарезервовано.", "danger")
         return redirect(url_for("users.profile"))
 
     try:
@@ -85,8 +121,8 @@ def cookie_delete():
 
     key = request.form.get("key", "").strip()
 
-    if not key or key == SESSION_COOKIE_NAME:
-        flash("Вкажіть ключ кукі для видалення.", "danger")
+    if not key or key in RESERVED_COOKIES:
+        flash("Вкажіть ключ кукі для видалення (не «session» і не «theme»).", "danger")
         return redirect(url_for("users.profile"))
 
     response = redirect(url_for("users.profile"))
@@ -107,7 +143,7 @@ def cookies_delete_all():
     response = redirect(url_for("users.profile"))
     deleted = 0
     for key in request.cookies:
-        if key == SESSION_COOKIE_NAME:
+        if key in RESERVED_COOKIES:
             continue
         response.delete_cookie(key, path=COOKIE_PATH)
         deleted += 1
