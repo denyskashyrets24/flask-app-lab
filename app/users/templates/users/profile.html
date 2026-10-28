@@ -1,13 +1,114 @@
-{% extends "base.html" %} {% block title %}Профіль{% endblock %} {% block
-content %}
-<div class="card shadow-sm" style="max-width: 500px">
-  <div class="card-body">
-    <h2 class="card-title">Вітаємо, {{ username }}!</h2>
-    <p class="card-text">Ви успішно авторизовані.</p>
+{% extends 'base.html' %} {% block content %}
+<h2 class="mb-3">Вітаємо, {{ username }}!</h2>
+<p class="text-muted">Ви успішно авторизовані.</p>
 
-    <form method="POST" action="{{ url_for('users.logout') }}">
-      <button type="submit" class="btn btn-outline-danger">Вийти</button>
-    </form>
+<form method="POST" action="{{ url_for('users.logout') }}" class="mb-4">
+  <button type="submit" class="btn btn-outline-danger">Вийти</button>
+</form>
+
+<div class="row g-4">
+  <div class="col-lg-6">
+    <div class="card shadow-sm h-100">
+      <div class="card-body">
+        <h5 class="card-title">Додати кукі</h5>
+        <form method="POST" action="{{ url_for('users.cookie_add') }}">
+          <div class="mb-3">
+            <label for="cookie-key" class="form-label">Ключ</label>
+            <input
+              type="text"
+              class="form-control"
+              id="cookie-key"
+              name="key"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="cookie-value" class="form-label">Значення</label>
+            <input
+              type="text"
+              class="form-control"
+              id="cookie-value"
+              name="value"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="cookie-max-age" class="form-label"
+              >Термін дії (секунди)</label
+            >
+            <input
+              type="number"
+              class="form-control"
+              id="cookie-max-age"
+              name="max_age"
+              min="1"
+              value="3600"
+            />
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Додати</button>
+        </form>
+      </div>
+    </div>
   </div>
+
+  <div class="col-lg-6">
+    <div class="card shadow-sm h-100">
+      <div class="card-body">
+        <h5 class="card-title">Видалити кукі</h5>
+        <form
+          method="POST"
+          action="{{ url_for('users.cookie_delete') }}"
+          class="mb-3"
+        >
+          <label for="delete-key" class="form-label">Ключ</label>
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              id="delete-key"
+              name="key"
+              required
+            />
+            <button type="submit" class="btn btn-warning">Видалити</button>
+          </div>
+        </form>
+        <form
+          method="POST"
+          action="{{ url_for('users.cookies_delete_all') }}"
+          onsubmit="return confirm('Видалити всі кукі?');"
+        >
+          <button type="submit" class="btn btn-outline-danger w-100">
+            Видалити всі кукі
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mt-4">
+  <h5>Поточні кукі</h5>
+  {% if cookies %}
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered align-middle">
+      <thead>
+        <tr>
+          <th scope="col">Ключ</th>
+          <th scope="col">Значення</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for key, value in cookies.items() %}
+        <tr>
+          <td>{{ key }}</td>
+          <td>{{ value }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="text-muted">Збережених кукі немає.</p>
+  {% endif %}
 </div>
 {% endblock %}
