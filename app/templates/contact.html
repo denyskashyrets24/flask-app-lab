@@ -1,0 +1,40 @@
+{% extends 'base.html' %} {% macro render_field(field) %}
+<div class="mb-3">
+  {{ field.label(class_="form-label") }} {% set base_class = "form-select" if
+  field.type == "SelectField" else "form-control" %} {% set css = base_class ~
+  (" is-invalid" if field.errors else "") %} {{ field(class_=css, **kwargs) }}
+  {% if field.errors %}
+  <div class="invalid-feedback d-block">
+    {% for error in field.errors %}
+    <div>{{ error }}</div>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+{% endmacro %} {% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-7">
+    <section id="contact-form">
+      <h2 class="text-center mb-4">Надішліть мені повідомлення</h2>
+
+      <form
+        method="POST"
+        action="{{ url_for('contact') }}"
+        novalidate
+        class="p-4 border rounded shadow-sm custom-form"
+      >
+        {{ form.hidden_tag() }} {% if form.csrf_token.errors %}
+        <div class="alert alert-danger">
+          Сесія форми недійсна або застаріла. Оновіть сторінку й спробуйте ще
+          раз.
+        </div>
+        {% endif %} {{ render_field(form.name, placeholder="Іван Петренко") }}
+        {{ render_field(form.email, placeholder="name@example.com") }} {{
+        render_field(form.phone, placeholder="+380 50 123 45 67") }} {{
+        render_field(form.subject) }} {{ render_field(form.message, rows=5) }}
+        {{ form.submit(class_="btn btn-primary w-100") }}
+      </form>
+    </section>
+  </div>
+</div>
+{% endblock %}

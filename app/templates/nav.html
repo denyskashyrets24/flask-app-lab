@@ -22,6 +22,9 @@
             >Досвід</a
           >
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('contact') }}">Контакти</a>
+        </li>
         {% if session.get('username') %}
         <li class="nav-item">
           <a class="nav-link" href="{{ url_for('users.profile') }}">Профіль</a>
