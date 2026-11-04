@@ -1,17 +1,44 @@
-{% extends 'base.html' %} {% block title %}{{ product.name }}{% endblock %} {%
-block content %}
-<div class="container my-4">
-  <div class="card shadow-sm">
-    <div class="card-body">
-      <h2>{{ product.name }}</h2>
-      <h4 class="text-success">${{ product.price }}</h4>
-      <p class="card-text mt-3">{{ product.content }}</p>
-      <a
-        href="{{ url_for('products.list_products') }}"
-        class="btn btn-outline-secondary mt-2"
-        >← Назад до списку</a
-      >
-    </div>
+{% extends 'base.html' %} {% block content %}
+<div class="row">
+  <div class="col-md-4">
+    {% if p.image %}
+    <img
+      src="{{ url_for('products.static', filename=p.image) }}"
+      alt="{{ p.name }}"
+      class="img-fluid rounded"
+    />
+    {% else %}
+    <div class="border rounded p-5 text-center text-muted">Немає фото</div>
+    {% endif %}
+  </div>
+  <div class="col-md-8">
+    <h2>{{ p.name }}</h2>
+    <p class="text-muted">{{ p.category }} · додано {{ p.created_at }}</p>
+    <p>{{ p.content }}</p>
+    <p>
+      <strong>Ціна:</strong> {{ '%.2f'|format(p.price) }} ·
+      <strong>Кількість:</strong> {{ p.quantity }}
+    </p>
+
+    <a
+      href="{{ url_for('products.edit_product', id=p.id) }}"
+      class="btn btn-warning"
+      >Редагувати</a
+    >
+    <a
+      href="{{ url_for('products.list_products') }}"
+      class="btn btn-outline-secondary"
+      >До списку</a
+    >
+
+    <form
+      method="POST"
+      action="{{ url_for('products.delete_product', id=p.id) }}"
+      class="d-inline"
+      onsubmit="return confirm('Видалити товар?');"
+    >
+      <button type="submit" class="btn btn-danger">Видалити</button>
+    </form>
   </div>
 </div>
 {% endblock %}

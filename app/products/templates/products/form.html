@@ -1,0 +1,31 @@
+{% extends 'base.html' %} {% macro render_field(field) %}
+<div class="mb-3">
+  {{ field.label(class_="form-label") }} {% if field.type == "FileField" %} {{
+  field(class_="form-control" ~ (" is-invalid" if field.errors else "")) }} {%
+  elif field.type == "SelectField" %} {{ field(class_="form-select") }} {% else
+  %} {{ field(class_="form-control" ~ (" is-invalid" if field.errors else ""))
+  }} {% endif %} {% for error in field.errors %}
+  <div class="invalid-feedback d-block">{{ error }}</div>
+  {% endfor %}
+</div>
+{% endmacro %} {% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-7">
+    <h2 class="mb-4">{{ title }}</h2>
+    <form method="POST" enctype="multipart/form-data" novalidate>
+      {{ form.hidden_tag() }} {{ render_field(form.name) }} {{
+      render_field(form.content) }} {{ render_field(form.price) }} {{
+      render_field(form.category) }} {{ render_field(form.quantity) }} {% if
+      product and product.image %}
+      <p class="mb-1">Поточне зображення:</p>
+      <img
+        src="{{ url_for('products.static', filename=product.image) }}"
+        height="80"
+        class="mb-2"
+      />
+      {% endif %} {{ render_field(form.image) }} {{ form.submit(class_="btn
+      btn-primary") }}
+    </form>
+  </div>
+</div>
+{% endblock %}
